@@ -43,7 +43,6 @@ The project comprises three Solidity smart contracts:
     * The foundational lending logic.
     * Allows users to `lend`, `borrow`, and `repay` `MyToken`.
     * Calculates interest on loans.
-    * (Note: This contract is included as per assignment requirements, but the `LendingPlatformWithCollateral.sol` is the primary focus for advanced features).
 
 3.  **`LendingPlatformWithCollateral.sol`**
     * Extends the `LendingPlatform` functionality by requiring ETH collateral for borrowing.
@@ -73,21 +72,67 @@ To deploy and interact with the contracts, follow these steps in Remix:
 * Click **"Deploy"**.
 * **Important:** Copy the address of the newly deployed `MyToken` contract from the "Deployed Contracts" section.
 
-#### 2. Deploy `LendingPlatform.sol` (Optional, for full assignment compliance)
+#### 2. Deploy `LendingPlatform.sol`
 * Select `LendingPlatform` from the `CONTRACT` dropdown.
 * In the constructor fields:
     * `_token`: Paste the address of your deployed `MyToken` contract.
     * `_interestRate`: Enter `5` (for 5%).
 * Click **"Deploy"**.
 
-#### 3. Deploy `LendingPlatformWithCollateral.sol` (Main platform for testing)
+#### 3. Deploy `LendingPlatformWithCollateral.sol`
 * Select `LendingPlatformWithCollateral` from the `CONTRACT` dropdown.
 * In the constructor fields:
     * `_token`: Paste the address of your deployed `MyToken` contract.
     * `_interestRate`: Enter `5` (for 5%).
 * Click **"Deploy"**.
 
-## Interaction Guide (Testing the Collateralized Platform)
+---
+
+## Interaction Guides
+
+### Interaction Guide (LendingPlatform.sol - Basic)
+
+This guide focuses on interacting with the simpler `LendingPlatform.sol` contract, which does not require collateral. Ensure you have deployed `MyToken.sol` and `LendingPlatform.sol` as described in the Deployment Guide.
+
+We will use two Remix VM accounts to simulate interaction:
+* **Account 1 (Lender):** The first default account (e.g., `0x5B38...`). This account initially holds all `MyToken`s.
+* **Account 2 (Borrower):** The second default account (e.g., `0xAb84...`).
+
+#### 1. User 1 (Lender) Lends Tokens to `LendingPlatform.sol`
+
+* **Ensure Account 1 is selected** in the "ACCOUNT" dropdown.
+* **Approve Tokens (on `MyToken` contract):**
+    * Expand your deployed `MyToken` contract.
+    * Call `approve(spender: LendingPlatform_Address, amount: 500000000000000000000)` (for 500 MyTokens). Transact.
+* **Lend Tokens (on `LendingPlatform.sol` contract):**
+    * Expand your deployed `LendingPlatform.sol` contract.
+    * Call `lend(_amount: 500000000000000000000)`. Transact.
+    * *(Optional Verification: Check `MyToken` balance of `LendingPlatform` and `lendingBalance` of Account 1).*
+
+#### 2. User 2 (Borrower) Borrows Tokens from `LendingPlatform.sol`
+
+* **Switch to Account 2** in the "ACCOUNT" dropdown.
+* **Borrow Tokens (on `LendingPlatform.sol` contract):**
+    * Expand your deployed `LendingPlatform.sol` contract.
+    * Call `borrow(_amount: 100000000000000000)` (for 0.1 MyToken). Transact.
+    * *(Optional Verification: Check `borrowingBalance` and `borrowStartTime` of Account 2, and `MyToken` balance of Account 2).*
+
+#### 3. User 2 (Borrower) Repays Loan to `LendingPlatform.sol`
+
+* **Ensure Account 2 is selected.**
+* *(Optional: Allow some time to pass to accrue noticeable interest.)*
+* **Approve Repayment (on `MyToken` contract):**
+    * Expand your deployed `MyToken` contract.
+    * Call `approve(spender: LendingPlatform_Address, amount: 150000000000000000)` (for 0.15 MyToken to cover principal + interest). **Ensure Account 2 has sufficient MyTokens in its balance to cover this amount** (you might need Account 1 to `transfer` more `MyToken` to Account 2 if its balance is just the borrowed amount). Transact.
+* **Repay Loan (on `LendingPlatform.sol` contract):**
+    * Call `repay()`. Transact.
+    * *(Optional Verification: Check `borrowingBalance` and `borrowStartTime` of Account 2 are reset to 0).*
+
+---
+
+### Interaction Guide (LendingPlatformWithCollateral.sol - Advanced)
+
+This guide focuses on interacting with the `LendingPlatformWithCollateral.sol` contract, which requires ETH collateral for borrowing. Ensure you have deployed `MyToken.sol` and `LendingPlatformWithCollateral.sol` as described in the Deployment Guide.
 
 We will use two Remix VM accounts to simulate interaction:
 * **Account 1 (Lender):** The first default account (e.g., `0x5B38...`). This account initially holds all `MyToken`s.
@@ -102,7 +147,7 @@ We will use two Remix VM accounts to simulate interaction:
 * **Lend Tokens (on `LendingPlatformWithCollateral` contract):**
     * Expand your deployed `LendingPlatformWithCollateral` contract.
     * Call `lend(_amount: 500000000000000000000)`. Transact.
-    * (Verify `MyToken` balance of `LendingPlatformWithCollateral` and `lendingBalance` of Account 1).
+    * *(Verify `MyToken` balance of `LendingPlatformWithCollateral` and `lendingBalance` of Account 1).*
 
 #### 2. User 2 (Borrower) Deposits ETH Collateral
 
@@ -110,14 +155,14 @@ We will use two Remix VM accounts to simulate interaction:
 * **Deposit Collateral (on `LendingPlatformWithCollateral` contract):**
     * In the "Value" field (near the Account dropdown), enter `2` and set units to "Ether".
     * Call `depositCollateral()`. Transact.
-    * (Verify `ethCollateral` of Account 2).
+    * *(Verify `ethCollateral` of Account 2).*
 
 #### 3. User 2 (Borrower) Borrows Tokens
 
 * **Ensure Account 2 is selected.**
 * **Borrow Tokens (on `LendingPlatformWithCollateral` contract):**
     * Call `borrow(_amount: 100000000000000000)` (for 0.1 MyToken). Transact.
-    * (Verify `borrowingBalance` and `borrowStartTime` of Account 2, and `MyToken` balance of Account 2).
+    * *(Verify `borrowingBalance` and `borrowStartTime` of Account 2, and `MyToken` balance of Account 2).*
 
 #### 4. User 2 (Borrower) Repays Loan
 
@@ -128,14 +173,14 @@ We will use two Remix VM accounts to simulate interaction:
     * Call `approve(spender: LendingPlatformWithCollateral_Address, amount: 150000000000000000)` (for 0.15 MyToken to cover principal + interest and potential gas). **Ensure Account 2 has sufficient MyTokens in its balance to cover this amount** (you might need Account 1 to `transfer` more `MyToken` to Account 2 if its balance is just the borrowed amount). Transact.
 * **Repay Loan (on `LendingPlatformWithCollateral` contract):**
     * Call `repay()`. Transact.
-    * (Verify `borrowingBalance` and `borrowStartTime` of Account 2 are reset to 0).
+    * *(Verify `borrowingBalance` and `borrowStartTime` of Account 2 are reset to 0).*
 
 #### 5. User 2 (Borrower) Withdraws ETH Collateral
 
 * **Ensure Account 2 is selected.**
 * **Withdraw Collateral (on `LendingPlatformWithCollateral` contract):**
     * Call `withdrawCollateral(_amount: 2000000000000000000)` (for 2 Ether in Wei). Transact.
-    * (Verify `ethCollateral` of Account 2 is 0, and Account 2's ETH balance has increased).
+    * *(Verify `ethCollateral` of Account 2 is 0, and Account 2's ETH balance has increased).*
 
 ## Security and Best Practices
 
