@@ -1,0 +1,244 @@
+{
+	"compiler": {
+		"version": "0.8.30+commit.73712a01"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "contract IERC20",
+						"name": "_token",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_interestRate",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_amount",
+						"type": "uint256"
+					}
+				],
+				"name": "borrow",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "borrowStartTime",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "borrowingBalance",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "interestRate",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_amount",
+						"type": "uint256"
+					}
+				],
+				"name": "lend",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "lendingBalance",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "repay",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "token",
+				"outputs": [
+					{
+						"internalType": "contract IERC20",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"details": "A simple platform for lending and borrowing a specific ERC20 token. Interest is calculated annually.",
+			"kind": "dev",
+			"methods": {
+				"borrow(uint256)": {
+					"details": "A user cannot borrow if they have an existing outstanding loan. The platform must have sufficient liquidity to cover the loan.",
+					"params": {
+						"_amount": "The amount of tokens to borrow."
+					}
+				},
+				"constructor": {
+					"details": "Initializes the contract by setting the token and interest rate.",
+					"params": {
+						"_interestRate": "The annual interest rate for loans (e.g., 5 for 5%).",
+						"_token": "The contract address of the ERC20 token for lending/borrowing."
+					}
+				},
+				"lend(uint256)": {
+					"details": "The user must first approve this contract to spend their tokens. The function follows the checks-effects-interactions pattern for security.",
+					"params": {
+						"_amount": "The amount of tokens to lend."
+					}
+				},
+				"repay()": {
+					"details": "The user must first approve this contract to spend the total repayment amount. Resets the user's borrow balance and start time upon successful repayment."
+				}
+			},
+			"stateVariables": {
+				"borrowStartTime": {
+					"details": "Used to calculate the duration of the loan for interest."
+				},
+				"interestRate": {
+					"details": "Stored as a percentage, e.g., 5 for 5%."
+				}
+			},
+			"title": "LendingPlatform",
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {
+				"borrow(uint256)": {
+					"notice": "Allows a user to borrow tokens from the platform."
+				},
+				"borrowStartTime(address)": {
+					"notice": "Maps a user's address to the timestamp when their borrow period began."
+				},
+				"borrowingBalance(address)": {
+					"notice": "Maps a user's address to the amount of tokens they have borrowed."
+				},
+				"interestRate()": {
+					"notice": "The annual interest rate for borrowing."
+				},
+				"lend(uint256)": {
+					"notice": "Allows a user to lend tokens to the platform."
+				},
+				"lendingBalance(address)": {
+					"notice": "Maps a user's address to the amount of tokens they have lent."
+				},
+				"repay()": {
+					"notice": "Repays an outstanding loan along with accrued interest."
+				},
+				"token()": {
+					"notice": "The ERC20 token contract used for transactions within the platform."
+				}
+			},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"LendingPlatform.sol": "LendingPlatform"
+		},
+		"evmVersion": "prague",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"@openzeppelin/contracts/token/ERC20/IERC20.sol": {
+			"keccak256": "0x74ed01eb66b923d0d0cfe3be84604ac04b76482a55f9dd655e1ef4d367f95bc2",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://5282825a626cfe924e504274b864a652b0023591fa66f06a067b25b51ba9b303",
+				"dweb:/ipfs/QmeCfPykghhMc81VJTrHTC7sF6CRvaA1FXVq2pJhwYp1dV"
+			]
+		},
+		"LendingPlatform.sol": {
+			"keccak256": "0x2f10dd25cb014c36bba70345c313ca2b5de9c657e0ae34812b1c03dea8f8f89f",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://c17c396f943ba21d4366d57783714bf69e6a9385988184f6fe12ba4862f415b5",
+				"dweb:/ipfs/QmR4efcNrSzc5FC8hjPg2nEfxXoXV4iXDahnvKwCPvf4gM"
+			]
+		}
+	},
+	"version": 1
+}

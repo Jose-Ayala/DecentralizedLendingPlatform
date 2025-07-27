@@ -1,0 +1,283 @@
+{
+	"compiler": {
+		"version": "0.8.30+commit.73712a01"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "contract IERC20",
+						"name": "_token",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_interestRate",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_amount",
+						"type": "uint256"
+					}
+				],
+				"name": "borrow",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "borrowStartTime",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "borrowingBalance",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "depositCollateral",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "ethCollateral",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "interestRate",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_amount",
+						"type": "uint256"
+					}
+				],
+				"name": "lend",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "lendingBalance",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "repay",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "token",
+				"outputs": [
+					{
+						"internalType": "contract IERC20",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_amount",
+						"type": "uint256"
+					}
+				],
+				"name": "withdrawCollateral",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"details": "A lending platform that requires users to deposit ETH as collateral.",
+			"kind": "dev",
+			"methods": {
+				"borrow(uint256)": {
+					"details": "The user must have deposited ETH collateral to be eligible for a loan.",
+					"params": {
+						"_amount": "The amount of tokens to borrow."
+					}
+				},
+				"constructor": {
+					"details": "Initializes the contract with the token address and interest rate.",
+					"params": {
+						"_interestRate": "The annual interest rate (e.g., 5 for 5%).",
+						"_token": "The address of the ERC20 token contract."
+					}
+				},
+				"depositCollateral()": {
+					"details": "This function is marked as `payable` to enable it to receive Ether. The amount of ETH sent with the transaction (`msg.value`) is added to the user's collateral balance."
+				},
+				"lend(uint256)": {
+					"details": "The user must first approve this contract to spend their tokens. The function follows the checks-effects-interactions pattern for security.",
+					"params": {
+						"_amount": "The amount of tokens to lend."
+					}
+				},
+				"repay()": {
+					"details": "The user must first approve this contract to spend the total repayment amount. Resets the user's borrow balance and start time upon successful repayment."
+				},
+				"withdrawCollateral(uint256)": {
+					"details": "A user cannot withdraw any collateral if they have an outstanding loan. This function follows the checks-effects-interactions pattern for security.",
+					"params": {
+						"_amount": "The amount of ETH (in Wei) to withdraw."
+					}
+				}
+			},
+			"stateVariables": {
+				"ethCollateral": {
+					"details": "Collateral is stored in Wei (the smallest unit of Ether)."
+				}
+			},
+			"title": "LendingPlatformWithCollateral",
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {
+				"borrow(uint256)": {
+					"notice": "Allows a user with collateral to borrow tokens from the platform."
+				},
+				"depositCollateral()": {
+					"notice": "Allows a user to deposit ETH to be used as collateral."
+				},
+				"ethCollateral(address)": {
+					"notice": "New mapping to track the ETH collateral deposited by each user."
+				},
+				"lend(uint256)": {
+					"notice": "Allows a user to lend tokens to the platform."
+				},
+				"repay()": {
+					"notice": "Repays an outstanding loan along with accrued interest."
+				},
+				"withdrawCollateral(uint256)": {
+					"notice": "Allows a user to withdraw their deposited ETH collateral."
+				}
+			},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"LendingPlatformWithCollateral.sol": "LendingPlatformWithCollateral"
+		},
+		"evmVersion": "prague",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"@openzeppelin/contracts/token/ERC20/IERC20.sol": {
+			"keccak256": "0x74ed01eb66b923d0d0cfe3be84604ac04b76482a55f9dd655e1ef4d367f95bc2",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://5282825a626cfe924e504274b864a652b0023591fa66f06a067b25b51ba9b303",
+				"dweb:/ipfs/QmeCfPykghhMc81VJTrHTC7sF6CRvaA1FXVq2pJhwYp1dV"
+			]
+		},
+		"LendingPlatformWithCollateral.sol": {
+			"keccak256": "0xde320553f3db122c6ae2e96f58bec03930344c6a3c02a67609a53d7fc29c4715",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://742cc326e1dc817375192be9e6af5a2795c3e0213aec10a67e2652f5d60504fb",
+				"dweb:/ipfs/QmXeJWez4KZtwEjWMSLMDitQULKpXjy9GWMe2F262vfzso"
+			]
+		}
+	},
+	"version": 1
+}
